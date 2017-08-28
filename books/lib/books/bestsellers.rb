@@ -1,5 +1,5 @@
 class Books::Bestsellers
-  attr_accessor :name, :author, :price, :url, :description
+  attr_accessor :name, :author, :duration, :url, :description
 
   def self.today
   # Scrape goodreads and return books based on data
@@ -9,7 +9,7 @@ end
   def self.scrape_books
     deals = []
 
-    deals << self.scrape_goodreads
+    deals << self.scrape_nyt
     #go to goodreads
     #find the books
     #extract the properties
@@ -32,8 +32,13 @@ end
     deals
   end
 
-    def self.scrape_goodreads
-      doc = Nokogiri::HTML(open("https://www.goodreads.com"))
+    def self.scrape_nyt
+      doc = Nokogiri::HTML(open("https://www.nytimes.com/books/best-sellers/"))
+      name = doc.search("h3.title").text
+      author = doc.search("p.author").text
+      # duration = doc.search ("p.freshness")
+      # description = doc.search ("p.description")
+      url = doc.search("button.button.buy-button.is-desktop").attr("data-amazon")
       binding.pry
     end
 end
