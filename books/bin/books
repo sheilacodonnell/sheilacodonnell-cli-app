@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+# require "bundler/setup"
+# require "books"
+
+require_relative '../lib/books' #this is loading my main lib
+
+Books::CLI.new.call
