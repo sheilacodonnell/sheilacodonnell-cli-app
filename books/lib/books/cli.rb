@@ -30,7 +30,7 @@ end
       #how to deal with users input
       if input.to_i > 0
         the_book = @books[input.to_i-1] #we want array index of the book
-        puts "#{the_book.name} - #{the_book.author} - #{the_book.description} - #{the_book.price}"
+        puts "#{the_book.name} - #{the_book.author} - #{the_book.description} - #{the_book.duration}"
       elsif input == "list"
         list_books
       else

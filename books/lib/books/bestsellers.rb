@@ -34,11 +34,16 @@ end
 
     def self.scrape_nyt
       doc = Nokogiri::HTML(open("https://www.nytimes.com/books/best-sellers/"))
-      name = doc.search("h3.title").text
-      author = doc.search("p.author").text
-      # duration = doc.search ("p.freshness")
-      # description = doc.search ("p.description")
-      url = doc.search("button.button.buy-button.is-desktop").attr("data-amazon")
-      binding.pry
+
+      book = self.new
+      book.name = doc.search("h3.title").text
+      book.author = doc.search("p.author").text
+      book.duration = doc.css(".freshness").text
+      book.description = doc.css(".description").text
+
+      book
+
     end
 end
+
+# ("div[itemprop='actors'] span[itemprop='name']")
