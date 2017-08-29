@@ -1,22 +1,22 @@
 #Our CLI Controller
+require 'pry'
 
 class Books::CLI
 
   def call
-    Bestsellers.scrape_all
+    Books::Bestsellers.scrape_all
     list_books
     menu
-    # goodbye
-
   end
 
   def list_books
     puts "The bestselling books right now."
-      Bestsellers.all.each.with_index(1) do |book, i|  #chain with index and give it 1 so you start with 1
-     puts "#{i}. #{book.title}" #creating the list of books
+      Books::Bestsellers.all.each.with_index(1) do |book, i|  #chain with index and give it 1 so you start with 1
+     puts "#{i}. #{book.title}"
+      #creating the list of books
   end
+  puts ""
 end
-
 
   def menu
     input = nil
@@ -28,25 +28,16 @@ end
         list_books
       elsif input == "exit"
         puts "Bye!!"
+      elsif input.to_i.between?(0, Books::Bestsellers.all.size)
 
-
-      elsif input.to_i > 0
-
-        book = Bestsellers.find(input)
+        book = Books::Bestsellers.find(input)
         puts     "#{book.title}"
         puts     "#{book.author}"
         puts     "#{book.description}"
         puts     "#{book.duration}"
 
-      # else
-      #   puts "Hmm, not sure what you want. Type list or exit."
-
+      end
     end
   end
-end
-
-# def goodbye
-#   "Bye!!"
-# end
 
 end

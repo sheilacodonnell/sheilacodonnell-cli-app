@@ -1,8 +1,8 @@
 # Books
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/books`. To experiment with that code, run `bin/console` for an interactive prompt.
+This Ruby Gem provides a CLI to scrape and view the current bestsellers list on the New York Times. (https://www.nytimes.com/books/best-sellers)
 
-TODO: Delete this and the text above, and describe your gem
+
 
 ## Installation
 
@@ -22,7 +22,9 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Type the below and follow the on screen prompts.
+
+    books
 
 ## Development
 
@@ -33,4 +35,3 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/'sheila-55692'/books.
-

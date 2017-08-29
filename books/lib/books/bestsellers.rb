@@ -6,7 +6,7 @@
 #       - @name = "Harry Potter"
 
 require 'pry'
-class Bestsellers
+class Books::Bestsellers
   attr_accessor :title, :author, :description, :duration
   @@all = []
 
@@ -22,44 +22,19 @@ class Bestsellers
    self.all[id.to_i - 1]
  end
 
- def self.book_data
-  @@book_data ||= doc.search(".title").collect{|e| e.text.split.each{|i| i.capitalize!}.join(' ')}
-end
-
-def self.authors
-   @@authors ||= doc.search(".author").collect{|e| e.text}
-end
-
-def self.durations
-  @@durations ||= doc.search(".freshness").collect{|e| e.text}
-end
-
-def self.descriptions
-  @@descriptions ||= doc.search(".description").collect{|e| e.text}
-end
-
-
-
-
-def self.doc
-  @@doc ||= Nokogiri::HTML(open("https://www.nytimes.com/books/best-sellers/"))
-end
-
-
   def self.scrape_all
 
-    (0..book_data.size).to_a.each do |i|
-      title = book_data[i]
-      author = authors[i]
-      duration = durations[i]
-      description = descriptions[i]
+    page = Nokogiri::HTML(open("https://www.nytimes.com/books/best-sellers/"))
+    page.encoding = 'utf-8'
+    page.css(".book-body").each do |b|
+      
+      book = Books::Bestsellers.new
+      book.title = b.css("h3.title").text.split.map {|t| t.capitalize}.join(" ")
+      book.author = b.css(".author").text
+      book.description = b.css(".description").text.strip
+      book.duration = b.css(".freshness").text
+      book.save
+    end
+  end
 
-     book = Bestsellers.new
-     book.title =  title
-     book.author =  author
-     book.duration =  duration
-     book.description = description
-     book.save #this pushes it into the array
-end
-end
 end
