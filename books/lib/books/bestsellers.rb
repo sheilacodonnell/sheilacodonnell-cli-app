@@ -23,7 +23,7 @@ class Bestsellers
  end
 
  def self.book_data
-  @@book_data ||= doc.search(".title").collect{|e| e.text}
+  @@book_data ||= doc.search(".title").collect{|e| e.text.split.each{|i| i.capitalize!}.join(' ')}
 end
 
 def self.authors
@@ -59,7 +59,7 @@ end
      book.author =  author
      book.duration =  duration
      book.description = description
-     book.save
+     book.save #this pushes it into the array
 end
 end
 end
