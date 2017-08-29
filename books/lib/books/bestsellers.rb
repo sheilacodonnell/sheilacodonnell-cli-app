@@ -1,49 +1,65 @@
-class Books::Bestsellers
-  attr_accessor :name, :author, :duration, :url, :description
+# object
+#   class
+#     -@@all - all objects in this class
+#     -@@doc - all the data needed to create object in this class
+#     book_1 = Book.new
+#       - @name = "Harry Potter"
 
-  def self.today
-  # Scrape goodreads and return books based on data
-  self.scrape_books
+require 'pry'
+class Bestsellers
+  attr_accessor :title, :author, :description, :duration
+  @@all = []
+
+ def self.all
+   @@all
+ end
+
+ def save
+   @@all << self
+ end
+
+ def self.find(id)
+   self.all[id.to_i - 1]
+ end
+
+ def self.book_data
+  @@book_data ||= doc.search(".title").collect{|e| e.text}
 end
 
-  def self.scrape_books
-    deals = []
-
-    deals << self.scrape_nyt
-    #go to goodreads
-    #find the books
-    #extract the properties
-    #instantiate a books
-
-    # bestseller_1 = self.new
-    # bestseller_1.name = "Six of Crows (Six of Crows, #1)"
-    # bestseller_1.author = "Leigh Bardugo"
-    # bestseller_1.price = "$2.99"
-    # bestseller_1.url = "http://goodreads.com"
-    # bestseller_1.description = "From the New York Times and USA Today-bestselling author of the Grisha Trilogy. Criminal prodigy Kaz Brekker has been offered wealth beyond his wildest dreams. But to claim it, he'll have to pull off a seemingly impossible heist and a crew desperate enough and dangerous enough to get the job done."
-    #
-    # bestseller_2 = self.new
-    # bestseller_2.name = "Loving Frank"
-    # bestseller_2.author = "Nancy Horan"
-    # bestseller_2.price = "$2.99"
-    # bestseller_2.description = "Mamah Borthwick Cheney struggles to justify her clandestine love affair with Frank Lloyd Wright. Four years earlier, in 1903, Mamah and her husband had commissioned the renowned architect to design a new home for them. During the construction of the house, a powerful attraction developed between Mamah and Frank, and in time the lovers embarked on a course that would shock Chicago society and forever change their lives."
-
-    #at the end return this array
-    deals
-  end
-
-    def self.scrape_nyt
-      doc = Nokogiri::HTML(open("https://www.nytimes.com/books/best-sellers/"))
-
-      book = self.new
-      book.name = doc.search("h3.title").text
-      book.author = doc.search("p.author").text
-      book.duration = doc.css(".freshness").text
-      book.description = doc.css(".description").text
-
-      book
-
-    end
+def self.authors
+   @@authors ||= doc.search(".author").collect{|e| e.text}
 end
 
-# ("div[itemprop='actors'] span[itemprop='name']")
+def self.durations
+  @@durations ||= doc.search(".freshness").collect{|e| e.text}
+end
+
+def self.descriptions
+  @@descriptions ||= doc.search(".description").collect{|e| e.text}
+end
+
+
+
+
+def self.doc
+  @@doc ||= Nokogiri::HTML(open("https://www.nytimes.com/books/best-sellers/"))
+end
+
+
+  def self.scrape_all
+
+    (0..book_data.size).to_a.each do |i|
+      title = book_data[i]
+      author = authors[i]
+      duration = durations[i]
+      description = descriptions[i]
+
+     book = Bestsellers.new
+     book.title =  title
+     book.author =  author
+     book.duration =  duration
+     book.description = description
+     book.save
+end
+end
+end
